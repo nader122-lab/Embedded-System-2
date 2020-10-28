@@ -99,11 +99,88 @@ void randomPressTask() {
 
 // PIT load values
 // The larger the count, the less frequency the interrupts
-const uint32_t pitSlowCount = PITCLOCK * 10 / 32 ; // all 32 levels in 10 s
-const uint32_t pitFastCount = PITCLOCK * 2 / 32 ; // all 32 levels in 2 s
+const uint32_t pitSlowCount = PITCLOCK * 1 / 32 ; // complete cycle in 6 s
+const uint32_t pitFastCount = PITCLOCK * 0.3333 / 32 ; // complete cycle in 2 s
 
 // Brightness level
 unsigned int bright = 0 ;  // the current brightness
+#define REDON 0
+#define BLUEINC 1
+#define REDDEC 2
+#define GREENINC 3
+#define BLUEDEC 4
+#define REDINC 5
+#define GREENDEC 6
+int colourState = REDON;
+
+void colourChange(void) { 
+  switch(colourState) {
+         case REDON:                 
+         setLEDBrightness (Red, 32) ;
+         bright = 0;
+         colourState = BLUEINC;
+
+        break ;
+    
+        case BLUEINC:  
+         if (bright == 31){
+            colourState = REDDEC;
+         }         
+         bright = bright + 1; 
+         setLEDBrightness(Blue, bright) ;           
+
+        break ;
+          
+        case REDDEC:
+          if (bright == 1){
+            colourState = GREENINC;
+          } 
+          bright = (bright - 1);    
+          setLEDBrightness(Red, bright) ;
+
+        break ;
+            
+        case GREENINC:
+           if (bright == 31){
+            colourState = BLUEDEC;  
+           } 
+           bright = bright + 1;   
+           setLEDBrightness(Green, bright) ;
+                
+       break ;
+            
+       case BLUEDEC:
+          if (bright == 1){
+            colourState = REDINC;
+          } 
+          bright = (bright - 1);               
+          setLEDBrightness(Blue, bright) ;
+        break ;
+            
+        case REDINC:
+            if (bright == 31){
+            colourState = GREENDEC;  
+           } 
+           bright = bright + 1;     
+           setLEDBrightness(Red, bright) ;
+        break ;
+            
+        case GREENDEC:
+            if (bright == 1){
+            colourState = BLUEINC;
+          } 
+          bright = (bright - 1);   
+          setLEDBrightness(Green, bright) ;
+        break ;
+  }
+    
+  
+}
+
+
+
+
+
 
 void PIT_IRQHandler(void) {
     // clear pending interrupts
@@ -115,10 +192,11 @@ void PIT_IRQHandler(void) {
         
         // add code here for channel 0 interrupt
         
-        // -- start of demo code    
-        bright = (bright + 1) % (MAXBRIGHTNESS + 1);        
-        setLEDBrightness(Green, bright) ;
-        // -- end of demo code
+      
+        
+        colourChange();
+      
+   
     }
 
     if (PIT->CHANNEL[1].TFLG & PIT_TFLG_TIF_MASK) {
