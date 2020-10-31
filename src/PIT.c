@@ -49,4 +49,3 @@ void stopTimer(int channel) {
 void setTimer(int channel, uint32_t timeout) {
     PIT->CHANNEL[channel].LDVAL = timeout ;
 }
-
