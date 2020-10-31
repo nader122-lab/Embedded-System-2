@@ -111,74 +111,71 @@ unsigned int bright = 0 ;  // the current brightness
 #define BLUEDEC 4
 #define REDINC 5
 #define GREENDEC 6
-int colourState = REDON;
+int colourState = REDON; // this variable holds the initial colour
 
 void colourChange(void) { 
   switch(colourState) {
          case REDON:                 
-         setLEDBrightness (Red, 32) ;
-         bright = 0;
-         colourState = BLUEINC;
+         setLEDBrightness (Red, 32) ; // set Led colour for initial state
+         bright = 0; 
+         colourState = BLUEINC; // the next state
 
         break ;
     
         case BLUEINC:  
-         if (bright == 31){
-            colourState = REDDEC;
+         if (bright == 31){       // time to change state
+            colourState = REDDEC; // the next state
          }         
-         bright = bright + 1; 
-         setLEDBrightness(Blue, bright) ;           
+         bright = bright + 1;             // increment bright counter
+         setLEDBrightness(Blue, bright) ; // gradually increments brightness          
 
         break ;
           
         case REDDEC:
-          if (bright == 1){
-            colourState = GREENINC;
+          if (bright == 1){         // time to change state     
+            colourState = GREENINC; // the next state
           } 
-          bright = (bright - 1);    
-          setLEDBrightness(Red, bright) ;
+          bright = (bright - 1);          // decrement bright counter
+          setLEDBrightness(Red, bright) ; // gradually decrements brightness
 
         break ;
             
         case GREENINC:
-           if (bright == 31){
-            colourState = BLUEDEC;  
+           if (bright == 31){      // time to change state
+            colourState = BLUEDEC; // the next state 
            } 
-           bright = bright + 1;   
-           setLEDBrightness(Green, bright) ;
+           bright = bright + 1;               // increment bright counter
+           setLEDBrightness(Green, bright) ;  // gradually increments brightness
                 
        break ;
             
        case BLUEDEC:
-          if (bright == 1){
-            colourState = REDINC;
+          if (bright == 1){       // time to change state
+            colourState = REDINC; // the next state
           } 
-          bright = (bright - 1);               
-          setLEDBrightness(Blue, bright) ;
+          bright = (bright - 1);              // decrement bright counter  
+          setLEDBrightness(Blue, bright) ;    // gradually decrements brightness
         break ;
             
         case REDINC:
-            if (bright == 31){
-            colourState = GREENDEC;  
+            if (bright == 31){      // time to change state
+            colourState = GREENDEC; // the next state 
            } 
-           bright = bright + 1;     
-           setLEDBrightness(Red, bright) ;
+           bright = bright + 1;               // increment bright counter
+           setLEDBrightness(Red, bright) ;    // gradually increments brightne ss
         break ;
             
         case GREENDEC:
-            if (bright == 1){
-            colourState = BLUEINC;
+            if (bright == 1){      // time to change state
+            colourState = BLUEINC; // the next state
           } 
-          bright = (bright - 1);   
-          setLEDBrightness(Green, bright) ;
+          bright = (bright - 1);              // decrement bright counter  
+          setLEDBrightness(Green, bright) ;   // gradually decrements brightness
         break ;
   }
     
   
 }
-
-
-
 
 
 
